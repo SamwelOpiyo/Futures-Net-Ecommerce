@@ -1,4 +1,11 @@
 sudo: true
+language: python
+python:
+  - "3.6"
+services:
+- postgresql
+- docker
+- redis-server
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq build-essential gettext python-dev zlib1g-dev libpq-dev xvfb
@@ -6,6 +13,17 @@ before_install:
   - sudo apt-get install -qq graphviz-dev python-setuptools python3-dev python-virtualenv python-pip
   - sudo apt-get install -qq firefox automake libtool libreadline6 libreadline6-dev libreadline-dev
   - sudo apt-get install -qq libsqlite3-dev libxml2 libxml2-dev libssl-dev libbz2-dev wget curl llvm
-language: python
-python:
-  - "3.6"
+install:
+- pip install -r requirements/local.txt
+- pip install -r requirements/production.txt
+
+before_script:
+- psql -c "CREATE DATABASE futures_net_ecommerce;" -U postgres
+
+env:
+- DATABASE_URL=postgres://postgres:@localhost:5432/futures_net_ecommerce CELERY_BROKER_URL=redis:// USE_DOCKER=no DJANGO_DEBUG=True
+
+script:
+- coverage run --source="." manage.py test --noinput --
+- testrunner="xmlrunner.extra.djangotestrunner.XMLTestRunner"
+- coverage report --skip-covered
