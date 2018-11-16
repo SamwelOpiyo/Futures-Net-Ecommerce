@@ -1,0 +1,5 @@
+[run]
+include = futures_net_ecommerce/*
+omit = *migrations*, *tests*
+plugins =
+    django_coverage_plugin
