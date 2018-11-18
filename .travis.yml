@@ -24,6 +24,4 @@ env:
 - DATABASE_URL=postgres://postgres:@localhost:5432/futures_net_ecommerce CELERY_BROKER_URL=redis:// USE_DOCKER=no DJANGO_DEBUG=True
 
 script:
-- coverage run --source="." manage.py test --noinput --
-- testrunner="xmlrunner.extra.djangotestrunner.XMLTestRunner"
-- coverage report --skip-covered
+- pytest
