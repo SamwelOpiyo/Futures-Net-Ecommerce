@@ -27,7 +27,10 @@ class TestProductCategoryModel(TestCase):
 
     def test_product_category_creation_mommy(self):
         self.assertTrue(isinstance(self.new_product_category, ProductCategory))
-        self.assertTrue(self.new_product_category.__str__(), self.new_product_category.category_slug)
+        self.assertTrue(
+            self.new_product_category.__str__(),
+            self.new_product_category.category_slug,
+        )
 
 
 class TestMediaUploadModel(TestCase):
@@ -37,7 +40,10 @@ class TestMediaUploadModel(TestCase):
 
     def setUp(self):
         self.new_user = mommy.make("users.User")
-        self.new_media = mommy.make("catalogue.MediaUpload", media_file=ContentFile('A string with the file content'))
+        self.new_media = mommy.make(
+            "catalogue.MediaUpload",
+            media_file=ContentFile("A string with the file content"),
+        )
 
     def test_media_creation_mommy(self):
         self.assertTrue(isinstance(self.new_user, User))
@@ -57,7 +63,9 @@ class TestProductModel(TestCase):
     def test_product_creation_mommy(self):
         self.assertTrue(isinstance(self.new_user, User))
         self.assertTrue(isinstance(self.new_product, Product))
-        self.assertTrue(self.new_product.__str__(), self.new_product.product_slug)
+        self.assertTrue(
+            self.new_product.__str__(), self.new_product.product_slug
+        )
 
 
 class TestProductAttributeGroupModel(TestCase):
@@ -74,7 +82,10 @@ class TestProductAttributeGroupModel(TestCase):
         self.assertTrue(
             isinstance(self.new_product_attribute_group, ProductAttributeGroup)
         )
-        self.assertTrue(self.new_product_attribute_group.__str__(), self.new_product_attribute_group.attribute_group_name)
+        self.assertTrue(
+            self.new_product_attribute_group.__str__(),
+            self.new_product_attribute_group.attribute_group_name,
+        )
 
 
 class TestProductAttributeModel(TestCase):
@@ -88,9 +99,16 @@ class TestProductAttributeModel(TestCase):
 
     def test_product_attribute_creation_mommy(self):
         self.assertTrue(isinstance(self.new_product, Product))
-        self.assertTrue(self.new_product.__str__(), self.new_product.product_slug)
-        self.assertTrue(isinstance(self.new_product_attribute, ProductAttribute))
-        self.assertTrue(self.new_product_attribute.__str__(), self.new_product_attribute.attribute_name)
+        self.assertTrue(
+            self.new_product.__str__(), self.new_product.product_slug
+        )
+        self.assertTrue(
+            isinstance(self.new_product_attribute, ProductAttribute)
+        )
+        self.assertTrue(
+            self.new_product_attribute.__str__(),
+            self.new_product_attribute.attribute_name,
+        )
 
 
 class TestProductAttributeValueModel(TestCase):
@@ -105,12 +123,20 @@ class TestProductAttributeValueModel(TestCase):
         )
 
     def test_product_attribute_value_creation_mommy(self):
-        self.assertTrue(isinstance(self.new_product_attribute, ProductAttribute))
-        self.assertTrue(self.new_product_attribute.__str__(), self.new_product_attribute.attribute_name)
+        self.assertTrue(
+            isinstance(self.new_product_attribute, ProductAttribute)
+        )
+        self.assertTrue(
+            self.new_product_attribute.__str__(),
+            self.new_product_attribute.attribute_name,
+        )
         self.assertTrue(
             isinstance(self.new_product_attribute_value, ProductAttributeValue)
         )
-        self.assertTrue(self.new_product_attribute_value.__str__(), self.new_product_attribute_value.product_attribute.attribute_name)
+        self.assertTrue(
+            self.new_product_attribute_value.__str__(),
+            self.new_product_attribute_value.product_attribute.attribute_name,
+        )
 
 
 class TestProductStockModel(TestCase):
@@ -124,6 +150,11 @@ class TestProductStockModel(TestCase):
 
     def test_product_stock_creation_mommy(self):
         self.assertTrue(isinstance(self.new_product, Product))
-        self.assertTrue(self.new_product.__str__(), self.new_product.product_slug)
+        self.assertTrue(
+            self.new_product.__str__(), self.new_product.product_slug
+        )
         self.assertTrue(isinstance(self.new_product_stock, ProductStock))
-        self.assertTrue(self.new_product_stock.__str__(), self.new_product_stock.product.product_slug)
+        self.assertTrue(
+            self.new_product_stock.__str__(),
+            self.new_product_stock.product.product_slug,
+        )

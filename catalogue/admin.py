@@ -9,7 +9,9 @@ from catalogue.models import (
     ProductStock,
     ProductAttributeValue,
 )
+
 # Register your models here.
+
 
 @admin.register(ProductAttribute)
 class ProductAttributeAdmin(admin.ModelAdmin):

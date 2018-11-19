@@ -40,6 +40,7 @@ class TestUserUpdateView:
 
 
 class TestUserRedirectView:
+
     def test_get_redirect_url(
         self, user: settings.AUTH_USER_MODEL, request_factory: RequestFactory
     ):

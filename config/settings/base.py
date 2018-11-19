@@ -67,11 +67,13 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "rest_framework",
+    "rest_framework_swagger",
+    "rest_framework.authtoken",
 ]
 LOCAL_APPS = [
     "futures_net_ecommerce.users.apps.UsersAppConfig",
     # Your stuff: custom apps go here
-    "catalogue.apps.CatalogueConfig"
+    "catalogue.apps.CatalogueConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -262,6 +264,30 @@ SOCIALACCOUNT_ADAPTER = (
     "futures_net_ecommerce.users.adapters.SocialAccountAdapter"
 )
 
+
+# DRF CONFIGURATION
+# ------------------------------------------------------------------------------
+# for DRF
+
+REST_FRAMEWORK = {
+    "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S.%fZ",
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    "DEFAULT_PERMISSION_CLASSES": [
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        # 'rest_framework.permissions.IsAuthenticated',
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly"
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        # 'rest_framework.authentication.BasicAuthentication',
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
+    "EXCEPTION_HANDLER": "rest_framework.views.exception_handler",
+}
 
 # Your stuff...
 # ------------------------------------------------------------------------------
