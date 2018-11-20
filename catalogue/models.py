@@ -26,8 +26,6 @@ class MandatoryFieldsModel(models.Model):
     )
 
     class Meta:
-        indexes = (BrinIndex(fields=["created"]),)
-        ordering = ["-created"]
         abstract = True
 
 
@@ -48,8 +46,10 @@ class ProductCategory(MandatoryFieldsModel):
     )
 
     class Meta:
+        indexes = (BrinIndex(fields=["created"]),)
         verbose_name = _("product category")
         verbose_name_plural = _("product categories")
+        ordering = ["-created"]
 
     def save(self, *args, **kwargs):
         self.category_slug = slugify(self.category_name)
@@ -76,7 +76,11 @@ class MediaUpload(MandatoryFieldsModel):
         verbose_name=_("media upload key"),
     )
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, to_field="id", verbose_name=_("user"), db_index=True
+        User,
+        on_delete=models.CASCADE,
+        to_field="id",
+        verbose_name=_("user"),
+        db_index=True,
     )
     media_type = models.CharField(
         max_length=5,
@@ -86,8 +90,7 @@ class MediaUpload(MandatoryFieldsModel):
         verbose_name=_("media upload type"),
     )
     media_file = models.FileField(
-        upload_to=get_upload_media_name,
-        verbose_name=_("media upload file"),
+        upload_to=get_upload_media_name, verbose_name=_("media upload file")
     )
     media_upload_thumbnail = models.ManyToManyField(
         "self",
@@ -98,8 +101,10 @@ class MediaUpload(MandatoryFieldsModel):
     )
 
     class Meta:
+        indexes = (BrinIndex(fields=["created"]),)
         verbose_name = _("media upload")
         verbose_name_plural = _("media uploads")
+        ordering = ["-created"]
 
     def __str__(self):
         return str(self.media_key)
@@ -149,8 +154,10 @@ class Product(MandatoryFieldsModel):
     )
 
     class Meta:
+        indexes = (BrinIndex(fields=["created"]),)
         verbose_name = _("product")
         verbose_name_plural = _("products")
+        ordering = ["-created"]
 
     def save(self, *args, **kwargs):
         self.product_slug = slugify(self.product_name)
@@ -174,8 +181,10 @@ class ProductAttributeGroup(MandatoryFieldsModel):
     )
 
     class Meta:
+        indexes = (BrinIndex(fields=["created"]),)
         verbose_name = _("product attribute group")
         verbose_name_plural = _("product attribute groups")
+        ordering = ["-created"]
 
     def __str__(self):
         return self.attribute_group_name
@@ -218,8 +227,10 @@ class ProductAttribute(MandatoryFieldsModel):
     )
 
     class Meta:
+        indexes = (BrinIndex(fields=["created"]),)
         verbose_name = _("product attribute")
         verbose_name_plural = _("product attributes")
+        ordering = ["-created"]
 
     def __str__(self):
         return self.attribute_name
@@ -259,8 +270,7 @@ class ProductAttributeValue(MandatoryFieldsModel):
         verbose_name=_("product attribute datetime value"),
     )
     attribute_value_object = GenericForeignKey(
-        "object_content_type",
-        "object_id",
+        "object_content_type", "object_id"
     )
 
     object_content_type = models.ForeignKey(
@@ -275,8 +285,10 @@ class ProductAttributeValue(MandatoryFieldsModel):
     )
 
     class Meta:
+        indexes = (BrinIndex(fields=["created"]),)
         verbose_name = _("product attribute value")
         verbose_name_plural = _("product attribute values")
+        ordering = ["-created"]
 
     def __str__(self):
         return self.product_attribute.attribute_name
@@ -296,8 +308,10 @@ class ProductStock(MandatoryFieldsModel):
     sold = models.PositiveSmallIntegerField(verbose_name=_("products sold"))
 
     class Meta:
+        indexes = (BrinIndex(fields=["created"]),)
         verbose_name = _("product stock")
         verbose_name_plural = _("product stock")
+        ordering = ["-created"]
 
     def __str__(self):
         return self.product.product_slug
