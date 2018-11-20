@@ -1,12 +1,17 @@
 from django.conf import settings
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
+from rest_framework.schemas import get_schema_view
+from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
+
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path(
+        "", TemplateView.as_view(template_name="pages/home.html"), name="home"
+    ),
     path(
         "about/",
         TemplateView.as_view(template_name="pages/about.html"),
@@ -49,4 +54,22 @@ if settings.DEBUG:
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
 
-        urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+        urlpatterns = [
+            path("__debug__/", include(debug_toolbar.urls))
+        ] + urlpatterns
+
+
+urlpatterns += [
+    re_path(r"^api/(?P<version>(v1))/", include("catalogue.api.urls"))
+]
+
+
+# Create our schema's view w/ the get_schema_view() helper method.
+# Pass in the proper Renderers for swagger
+schema_view = get_schema_view(
+    title="Futures Ecommerce API",
+    renderer_classes=[OpenAPIRenderer, SwaggerUIRenderer],
+)
+
+# Inlcude the schema view in our urls.
+urlpatterns += [path("api/schema/", schema_view, name="docs")]
