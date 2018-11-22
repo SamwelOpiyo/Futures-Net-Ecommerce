@@ -6,7 +6,7 @@ from model_mommy import mommy
 from futures_net_ecommerce.users.models import User
 from catalogue.models import (
     ProductAttribute,
-    ProductAttributeGroup,
+    AttributeGroup,
     MediaUpload,
     ProductCategory,
     Product,
@@ -68,23 +68,19 @@ class TestProductModel(TestCase):
         )
 
 
-class TestProductAttributeGroupModel(TestCase):
+class TestAttributeGroupModel(TestCase):
     """
     Test Product Attribute Group creation using generated data by model_mommy
     """
 
     def setUp(self):
-        self.new_product_attribute_group = mommy.make(
-            "catalogue.ProductAttributeGroup"
-        )
+        self.new_attribute_group = mommy.make("catalogue.AttributeGroup")
 
-    def test_product_attribute_group_creation_mommy(self):
+    def test_attribute_group_creation_mommy(self):
+        self.assertTrue(isinstance(self.new_attribute_group, AttributeGroup))
         self.assertTrue(
-            isinstance(self.new_product_attribute_group, ProductAttributeGroup)
-        )
-        self.assertTrue(
-            self.new_product_attribute_group.__str__(),
-            self.new_product_attribute_group.attribute_group_name,
+            self.new_attribute_group.__str__(),
+            self.new_attribute_group.attribute_group_name,
         )
 
 
@@ -156,5 +152,5 @@ class TestProductStockModel(TestCase):
         self.assertTrue(isinstance(self.new_product_stock, ProductStock))
         self.assertTrue(
             self.new_product_stock.__str__(),
-            self.new_product_stock.product.product_slug,
+            self.new_product_stock.product_attribute_value.id,
         )
