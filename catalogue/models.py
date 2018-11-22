@@ -128,6 +128,9 @@ class Product(MandatoryFieldsModel):
     expiry_date = models.DateTimeField(
         blank=True, null=True, verbose_name=_("product expiry date")
     )
+    product_price = models.DecimalField(
+        max_digits=13, decimal_places=3, verbose_name=_("product_price")
+    )
     product_category = models.ForeignKey(
         ProductCategory,
         on_delete=models.CASCADE,
@@ -167,12 +170,12 @@ class Product(MandatoryFieldsModel):
         return self.product_slug
 
 
-class ProductAttributeGroup(MandatoryFieldsModel):
+class AttributeGroup(MandatoryFieldsModel):
     attribute_group_name = models.CharField(
         max_length=100, verbose_name=_("product attribute group name")
     )
     parent_attribute_group = models.ForeignKey(
-        "ProductAttributeGroup",
+        "AttributeGroup",
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -218,7 +221,7 @@ class ProductAttribute(MandatoryFieldsModel):
         verbose_name=_("product attribute value type"),
     )
     attribute_group = models.ForeignKey(
-        "ProductAttributeGroup",
+        "AttributeGroup",
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -245,7 +248,10 @@ class ProductAttributeValue(MandatoryFieldsModel):
         db_index=True,
     )
     additional_price = models.DecimalField(
-        max_digits=12, decimal_places=3, verbose_name=_("rating")
+        max_digits=12,
+        decimal_places=3,
+        verbose_name=_("additional_price"),
+        default=0.0,
     )
     attribute_value_text = models.TextField(
         blank=True, null=True, verbose_name=_("product attribute text value")
@@ -295,17 +301,19 @@ class ProductAttributeValue(MandatoryFieldsModel):
 
 
 class ProductStock(MandatoryFieldsModel):
-    product = models.ForeignKey(
-        Product,
+    product_attribute_value = models.OneToOneField(
+        ProductAttributeValue,
         on_delete=models.CASCADE,
-        related_name="stock_product",
-        verbose_name=_("product"),
+        related_name="stock_product_attribute_value",
+        verbose_name=_("Stock of Specific Value of the Product"),
         db_index=True,
     )
     in_store = models.PositiveSmallIntegerField(
         verbose_name=_("products in store")
     )
-    sold = models.PositiveSmallIntegerField(verbose_name=_("products sold"))
+    sold = models.PositiveSmallIntegerField(
+        verbose_name=_("products sold"), default=0
+    )
 
     class Meta:
         indexes = (BrinIndex(fields=["created"]),)
@@ -314,4 +322,4 @@ class ProductStock(MandatoryFieldsModel):
         ordering = ["-created"]
 
     def __str__(self):
-        return self.product.product_slug
+        return self.product_attribute_value.id

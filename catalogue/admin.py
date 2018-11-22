@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from catalogue.models import (
     ProductAttribute,
-    ProductAttributeGroup,
+    AttributeGroup,
     MediaUpload,
     ProductCategory,
     Product,
@@ -18,8 +18,8 @@ class ProductAttributeAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(ProductAttributeGroup)
-class ProductAttributeGroupAdmin(admin.ModelAdmin):
+@admin.register(AttributeGroup)
+class AttributeGroupAdmin(admin.ModelAdmin):
     pass
 
 
