@@ -31,7 +31,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         "product_media_files__user",
         "product_media_files__media_upload_thumbnail",
         "product_category__parent_category",
-        "product__attribute_group",
+        "product__attribute_group__parent_attribute_group",
         "product__product_attribute__stock_product_attribute_value",
         "product__product_attribute__attribute_value_object",
     )
