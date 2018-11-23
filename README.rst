@@ -36,6 +36,23 @@ Setting Up Your Users
 
 * The first time you login with the superuser account after its creation, you'll see a "Verify Your E-mail Address" page. Use the simulated email verification message from the console to activate the account.
 
+Authentication and User Management Documentation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For details about user management and authentication, check `Django Rest Auth <https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html>`_.
+
+To get Token for an already existing user:
+
+::
+
+    curl http://127.0.0.1:8000/rest-auth/login/ -X POST -d "username={{username}}&password={{password}}"
+
+Usage of token is like:
+
+::
+
+    curl http://127.0.0.1:8000/api/v1/products/ -H "Authorization: Token {{token_obtained_from_above}}"
+
 
 Test coverage
 ^^^^^^^^^^^^^
