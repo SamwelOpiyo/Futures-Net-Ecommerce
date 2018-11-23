@@ -18,6 +18,7 @@ from catalogue.api.serializers import (
     ProductAttributeValueSerializer,
     ProductStockSerializer,
 )
+from catalogue.task import generate_media_upload_thumbnail_task
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -31,7 +32,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         "product_media_files__user",
         "product_media_files__media_upload_thumbnail",
         "product_category__parent_category",
-        "product__attribute_group",
+        "product__attribute_group__parent_attribute_group",
         "product__product_attribute__stock_product_attribute_value",
         "product__product_attribute__attribute_value_object",
     )
@@ -100,6 +101,7 @@ class MediaUploadViewSet(viewsets.ModelViewSet):
             if self.request.user.is_superuser or self.request.user.is_staff:
                 serializer.validated_data["user"] = self.request.user
                 serializer.save()
+                generate_media_upload_thumbnail_task.delay(serializer.instance.media_key)
 
     def perform_update(self, serializer):
         if self.request.user.is_authenticated:
@@ -147,8 +149,12 @@ class ProductAttributeViewSet(viewsets.ModelViewSet):
     """
 
     queryset = ProductAttribute.objects.select_related(
-        "attribute_group", "product",
-    ).prefetch_related("product_attribute")
+        "attribute_group", "product"
+    ).prefetch_related(
+        "product_attribute",
+        "attribute_group__parent_attribute_group",
+        "product_attribute__stock_product_attribute_value",
+    )
     serializer_class = ProductAttributeSerializer
 
     def perform_create(self, serializer):
@@ -177,7 +183,9 @@ class ProductAttributeValueViewSet(viewsets.ModelViewSet):
 
     queryset = ProductAttributeValue.objects.select_related(
         "product_attribute", "object_content_type"
-    ).prefetch_related("attribute_value_object","stock_product_attribute_value")
+    ).prefetch_related(
+        "attribute_value_object", "stock_product_attribute_value"
+    )
     serializer_class = ProductAttributeValueSerializer
 
     def perform_create(self, serializer):

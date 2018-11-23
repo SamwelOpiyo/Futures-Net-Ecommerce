@@ -69,6 +69,8 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_swagger",
     "rest_framework.authtoken",
+    'rest_auth',
+    "rest_auth.registration",
 ]
 LOCAL_APPS = [
     "futures_net_ecommerce.users.apps.UsersAppConfig",

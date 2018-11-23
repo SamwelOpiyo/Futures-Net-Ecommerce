@@ -11,12 +11,14 @@ Ecommerce API Interview Challenge.
 :License: MIT
 
 
-Settings
---------
+Running Locally with Docker
+---------------------------
 
-Moved to settings_.
 
-.. _settings: http://cookiecutter-django.readthedocs.io/en/latest/settings.html
+See detailed `cookiecutter-django Running Locally with Docker documentation`_
+
+.. _cookiecutter-django Running Locally with Docker documentation: https://cookiecutter-django.readthedocs.io/en/latest/developing-locally-docker.html
+
 
 Basic Commands
 --------------
@@ -26,62 +28,67 @@ Setting Up Your Users
 
 * To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
 
-* To create an **superuser account**, use this command::
-
-    $ python manage.py createsuperuser
-
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-Type checks
-^^^^^^^^^^^
-
-Running type checks with mypy:
+* To create an **superuser account**, use this command:
 
 ::
 
-  $ mypy futures_net_ecommerce
+    $ docker-compose -f local.yml run --rm django python manage.py createsuperuser
+
+* The first time you login with the superuser account after its creation, you'll see a "Verify Your E-mail Address" page. Use the simulated email verification message from the console to activate the account.
+
+Authentication and User Management Documentation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For details about user management and authentication, check `Django Rest Auth <https://django-rest-auth.readthedocs.io/en/latest/api_endpoints.html>`_.
+
+To get Token for an already existing user:
+
+::
+
+    curl http://127.0.0.1:8000/rest-auth/login/ -X POST -d "username={{username}}&password={{password}}"
+
+Usage of token is like:
+
+::
+
+    curl http://127.0.0.1:8000/api/v1/products/ -H "Authorization: Token {{token_obtained_from_above}}"
+
 
 Test coverage
 ^^^^^^^^^^^^^
 
-To run the tests, check your test coverage, and generate an HTML coverage report::
+To run the tests::
 
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
+    $ docker-compose -f local.yml run --rm django coverage run -m pytest
 
 Running tests with py.test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-  $ pytest
-
-Live reloading and Sass CSS compilation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Moved to `Live reloading and SASS compilation`_.
-
-.. _`Live reloading and SASS compilation`: http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html
+  $ docker-compose -f local.yml run --rm django pytest
 
 
+API Docs
+--------
 
-Celery
-^^^^^^
+After the docker environment is ready to access the docs, navigate to:
 
-This app comes with Celery.
+`API documentation http://127.0.0.1:8000/api/schema/ <http://127.0.0.1:8000/api/schema/>`_
 
-To run a celery worker:
+* Every one including Anonymous Users can view data through the API.
 
-.. code-block:: bash
+* Only the Administrators/SuperUsers can create and edit information through the API.
 
-    cd futures_net_ecommerce
-    celery -A futures_net_ecommerce.taskapp worker -l info
-
-Please note: For Celery's import magic to work, it is important *where* the celery commands are run. If you are in the same folder with *manage.py*, you should be right.
+* Therefore to be able to access all the endpoints of the API, you need to be authenticated as a superuser.
 
 
+Guideline - Creating a Product
+------------------------------
 
+After the docker environment is ready to access the docs, navigate to:
+
+`Product Creation Guidelines <docs/product_creation.rst>`_
 
 
 Deployment
@@ -90,13 +97,9 @@ Deployment
 The following details how to deploy this application.
 
 
-
 Docker
 ^^^^^^
 
 See detailed `cookiecutter-django Docker documentation`_.
 
 .. _`cookiecutter-django Docker documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html
-
-
-

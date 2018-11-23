@@ -1,5 +1,6 @@
 import os
 
+# from catalogue.models import MediaUpload
 
 def get_upload_media_name(instance, filename):
     """
