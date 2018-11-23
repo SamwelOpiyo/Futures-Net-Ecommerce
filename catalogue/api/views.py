@@ -18,6 +18,7 @@ from catalogue.api.serializers import (
     ProductAttributeValueSerializer,
     ProductStockSerializer,
 )
+from catalogue.task import generate_media_upload_thumbnail_task
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -100,6 +101,7 @@ class MediaUploadViewSet(viewsets.ModelViewSet):
             if self.request.user.is_superuser or self.request.user.is_staff:
                 serializer.validated_data["user"] = self.request.user
                 serializer.save()
+                generate_media_upload_thumbnail_task.delay(serializer.instance.media_key)
 
     def perform_update(self, serializer):
         if self.request.user.is_authenticated:
