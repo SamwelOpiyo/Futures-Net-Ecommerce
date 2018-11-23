@@ -147,8 +147,12 @@ class ProductAttributeViewSet(viewsets.ModelViewSet):
     """
 
     queryset = ProductAttribute.objects.select_related(
-        "attribute_group", "product",
-    ).prefetch_related("product_attribute")
+        "attribute_group", "product"
+    ).prefetch_related(
+        "product_attribute",
+        "attribute_group__parent_attribute_group",
+        "product_attribute__stock_product_attribute_value",
+    )
     serializer_class = ProductAttributeSerializer
 
     def perform_create(self, serializer):
@@ -177,7 +181,9 @@ class ProductAttributeValueViewSet(viewsets.ModelViewSet):
 
     queryset = ProductAttributeValue.objects.select_related(
         "product_attribute", "object_content_type"
-    ).prefetch_related("attribute_value_object","stock_product_attribute_value")
+    ).prefetch_related(
+        "attribute_value_object", "stock_product_attribute_value"
+    )
     serializer_class = ProductAttributeValueSerializer
 
     def perform_create(self, serializer):
